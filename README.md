@@ -1,1 +1,1 @@
-# merckxnumber
+# merckx-number
