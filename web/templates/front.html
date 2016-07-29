@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".rider-select").select2({
+		ajax: {
+			url: "riders",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+				};
+			},
+			processResults: function (data, params) {
+				riders = [];
+				for (i = 0; i < data.riders.length; ++i) {
+					riders.push({ id: data.riders[i].index, text: data.riders[i].name });
+				}
+
+				return {
+					results: riders,
+				};
+			},
+			cache: true
+		},
+		escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+		minimumInputLength: 2,
+	});
+
+	var show_result = function(res) {
+		if (res.riders.length == 0) {
+			$("#number").html('<p class="bg-warning img-rounded">No path found</p>');
+		} else {
+			$("#number").html('<h1 class="bg-success img-rounded">' + (res.riders.length - 1).toString() + "</h1>");
+		}
+		$("#path").html("");
+		for (var i = 0; i < res.riders.length; i++) {
+			$("#path").append('<h2><a href="http://procyclingstats.com/rider/' + res.riders[i].rider + '">' + res.riders[i].name + '</a></h2>');
+			if (i < res.teams.length) {
+				$("#path").append('<p><small>on <a href="http://procyclingstats.com/team/' + res.teams[i].team + '">' +
+						res.teams[i].name + "</a> in " +
+						res.teams[i].year +
+						" with</small></p>");
+			}
+		}
+	};
+
+	$("#calculate-btn").click(function() {
+		var from = $('#from-select').val();
+		var to = $('#to-select').val();
+		$.ajax({
+			url: 'path/' + from + '/' + to,
+			success: function(res) {
+				show_result(res);
+			},
+			dataType: "json"
+		});
+	});
+
+	$("#change-to").click(function(ev) {
+		ev.preventDefault();
+
+		$("#to-select-container").show()
+	});
+
+	$("#to-select").on("change", function() {
+		var val = $("#to-select option:selected").text();
+		$("#to-name").html(val);
+		console.log(val);
+	});
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+	<p class="lead">Calculate the degrees of separation between your favorite rider and the legendary <span id="to-name">Eddy Merckx</span><a href="#" id="change-to"><small><sup>(change)</sup></small></a>.</p>
+
+	<div class="container">
+
+		<div class="form-group">
+			<select class="rider-select form-control" id="from-select" style="width: 100%">
+				<option value="0">Lars Petter Nordhaug</option>
+			</select>
+		</div>
+		<div class="form-group" id="to-select-container" style="display: none;">
+			<select class="rider-select form-control" id="to-select" style="width: 100%">
+				<option value="126" selected>Eddy Merckx</option>
+			</select>
+		</div>
+
+
+		<div class="form-group">
+			<input id="calculate-btn" class="btn" type="submit" value="Calculate!" />
+		</div>
+
+		<div id="number"></div>
+		<div id="path"></div>
+
+	</div> 
+</div>
+{% endblock %}
+

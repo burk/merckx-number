@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="col-lg-12">
+    <h1>About</h1>
+    <p>Data on riders and teams is from
+    <a href="http://www.procyclingstats.com/">ProCyclingStats</a> with teams
+    from 1963 until 2016. Riders form the nodes of a graph, and two nodes are
+    connected if the riders every rode on a team together (during the same season). The
+    <a href="https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm">Floyd–Washall algorithm</a> was used to calculate a shortest path between all pairs of riders. Note that there might be many such shortest paths, while only one of them is displayed.</p>
+
+    <p>The maximal distance to Eddy Merckx is 6, and eight riders are at this distance:
+    <ul>
+      <li>Mario Vonhof</li>
+      <li>Stefan Parinussa</li>
+      <li>Patrick Kohler</li>
+      <li>Steve Cunningham</li>
+      <li>Sven Biermann</li>
+      <li>Jordens Roman</li>
+      <li>Armin Kroniger</li>
+      <li>Serge Herz</li>
+    </ul>
+    The maximal distance between any pair of riders is 7, and 535 rider pairs are at this distance from eachother.</p>
+
+    <p>I might put the code up on Github at some point, feel free to email me any questions at <a href="mailto:bjorn@rustad.me">bjorn@rustad.me</a>.</p>
+  </div>
+</div>
+{% endblock %}
+

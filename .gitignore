@@ -1,0 +1,10 @@
+*.pyc
+*.p
+*.hdf5
+*.npy
+dist/venv
+dist/next
+dist/initial_dist
+dist/dist
+pcs_scraper/.scrapy
+
